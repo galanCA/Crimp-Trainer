@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //SERVICE_UUID    = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+        //CHARACTERISTICS_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
         mStatusBlueTv   = findViewById(R.id.statusBluetoothTv);
         mPairedTv       = findViewById(R.id.pairedTv);
         mBlueIv         = findViewById(R.id.bluetoothIv);
@@ -108,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
                     mPairedTv.setText("Paired Devices");
                     Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
                     for (BluetoothDevice device: devices) {
-                        mPairedTv.append("/nDevice: " + device.getName() + ", " + "," + device);
+                        mPairedTv.append("\nDevice: " + device.getName() + ", " + "," + device);
+
                     }
                 }
                 else {
