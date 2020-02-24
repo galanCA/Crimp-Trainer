@@ -1,11 +1,11 @@
 import asyncio
+import time
 from bleak import discover, BleakClient
+
 
 @asyncio.coroutine
 async def run():
 	devices = await discover()
-	#for d in devices:
-	#	print(d)
 	return devices
 
 
@@ -21,15 +21,19 @@ for d in devices_list:
 
 MODEL_NBR_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
-async def get_data(address, loop):
-    async with BleakClient(address, loop=loop) as client:
-        model_number = await client.read_gatt_char(MODEL_NBR_UUID)
-        print(model_number[0])
+async def get_data(address, loop): 
+	async with BleakClient(address, loop=loop) as client:
+	
+		while(1):
+			model_number = await client.read_gatt_char(MODEL_NBR_UUID)
+			print(model_number[0],model_number[1],model_number[2],model_number[3])
+			time.sleep(.1)
 
-        #print("Model Number: {0}".format("".join(map(chr, model_number))))
-
+		
 loop_data = asyncio.get_event_loop()
-loop_data.run_until_complete(get_data(MACaddress, loop_data))
-loop_data.run_until_complete(get_data(MACaddress, loop_data))
+try:
+	loop_data.run_until_complete(get_data(MACaddress, loop_data))
 
-#loop_data.run_forever()
+except KeyboardInterrupt:
+	loop_data.stop()
+	print("Done")
