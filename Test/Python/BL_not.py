@@ -1,6 +1,8 @@
+import struct
 import asyncio
 import time
 from bleak import discover, BleakClient
+
 
 
 @asyncio.coroutine
@@ -35,8 +37,13 @@ async def get_data(address, loop):
 				model_number = await client.read_gatt_char(MODEL_NBR_UUID)
 				#print(model_number)
 				#print(model_number, model_number[0],model_number[1],model_number[2],model_number[3])
-				print(int.from_bytes(model_number,"little"))
-				#time.sleep(.1)
+				# decode int
+				#print(int.from_bytes(model_number,"little"))
+				
+				# decode float
+				print(struct.unpack('f',model_number)[0])
+
+				time.sleep(.1)
 		except KeyboardInterrupt:
 			await client.disconnect()
 			print("Done")
