@@ -31,7 +31,7 @@ bool oldDeviceConnected = false;
 uint32_t value = 0;
 
 char rxChar[16];
-int data_rx = 1024*4;
+float data_rx = 1024*4;
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
@@ -50,8 +50,9 @@ class MyServerCallbacks: public BLEServerCallbacks {
     }
 };
 
-int get_data() {
-  return random(4096);
+float get_data() {
+  float temp = random(4096) + (random(99)/100.0);
+  return temp;
 }
 
 void setup() {
@@ -102,7 +103,7 @@ void loop() {
         pCharacteristic->notify();
         Serial.println(data_rx);
         //value++;
-        delay(200); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
+        delay(300); // bluetooth stack will go into congestion, if too many packets are sent, in 6 hours test i was able to go as low as 3ms
     }
     // disconnecting
     if (!deviceConnected && oldDeviceConnected) {
