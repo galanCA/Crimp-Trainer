@@ -14,6 +14,7 @@ const char ON_STM[] = "On";
 const char OFF_STM[] = "Off";
 
 char msg[20];
+long data;
 WiFiClient client;
 
 void setup() {
@@ -28,14 +29,17 @@ void setup() {
 }
 
 void loop() {
-  client.write("hello From ESP32");
-  /*
-  delay(1000);
-  while(1) {
-    client.write(random(300));
-    delay(1000);
-  }
-  */
+
+  sensorData();
+  client.write(data);
+  
+  
+  delay(500);
+}
+
+void sensorData(){
+  data = random(0,255);
+  Serial.println(data);
 }
 
 void connectToServer(const char * IP, const int Port) {
@@ -61,7 +65,7 @@ void connectToWiFi(const char * ssid, const char * pwd) {
   }
 
   Serial.println();
-  Serial.println("WiFi connected!");
+  Serial.println("connected to WIFI");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 }
