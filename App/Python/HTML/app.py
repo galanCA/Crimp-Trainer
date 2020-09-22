@@ -3,6 +3,7 @@ import random
 from datetime import datetime
 import json
 import time
+import socket
 
 app = Flask(__name__)
 random.seed()
@@ -17,7 +18,12 @@ def index():
 
 @app.route('/findESP32')
 def findESP32():
-	print("Looking....")
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.bind((TCP_IP, TCP_PORT))
+	s.listen(1)
+	print("connecting...")
+	conn, addr = s.accept()
+	print("Connected")
 	return ("nothing")
 
 @app.route('/chart-data', methods=['GET'])

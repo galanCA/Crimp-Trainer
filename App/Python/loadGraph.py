@@ -10,8 +10,6 @@ TCP_PORT = 3300
 BUFFER_SIZE = 20
 
 def main():
-	
-
 	# Create figure for plotting
 	fig = plt.figure()
 	ax = fig.add_subplot(1,1,1)
@@ -33,8 +31,6 @@ def main():
 
 
 def animate(i, conn, xs, ys, ys_max, ax):
-
-
 	data = conn.recv(BUFFER_SIZE)
 	print(data, int.from_bytes(data, byteorder='big'))
 	xs.append(i)

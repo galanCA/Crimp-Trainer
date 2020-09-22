@@ -4,8 +4,8 @@
 
 /** WiFi constants **/
 // Router definitions
-const char * networkName = "IRLab";
-const char * networkPswd = "robots4ever";
+const char * networkName = "GALAN_5G";//"IRLab";
+const char * networkPswd = "7133921140";//"robots4ever";
 
 // Host
 const char * host = "192.168.50.40";
