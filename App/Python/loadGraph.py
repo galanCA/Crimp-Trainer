@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from random import uniform
 
-TCP_IP = '192.168.50.40'
+TCP_IP = '192.168.0.114'
 TCP_PORT = 3300
 BUFFER_SIZE = 20
 
@@ -23,7 +23,7 @@ def main():
 
 	conn, addr = s.accept()
 	try:
-		ani = animation.FuncAnimation(fig, animate, fargs=(conn, xs, ys, ys_max, ax), interval=500)
+		ani = animation.FuncAnimation(fig, animate, fargs=(conn, xs, ys, ys_max, ax), interval=100)
 		plt.show()
 
 	except KeyboardInterrupt:
@@ -31,10 +31,13 @@ def main():
 
 
 def animate(i, conn, xs, ys, ys_max, ax):
-	data = conn.recv(BUFFER_SIZE)
-	print(data, int.from_bytes(data, byteorder='big'))
+	rawData = conn.recv(BUFFER_SIZE)
+	if len(rawData) is not 1:
+		return None
+	data = int.from_bytes(rawData, byteorder='big')
+	print(rawData, data)
 	xs.append(i)
-	ys.append(int.from_bytes(data, byteorder='big'))
+	ys.append(data)
 	xs = xs[-20:]
 	ys = ys[-20:]
 	ax.clear()

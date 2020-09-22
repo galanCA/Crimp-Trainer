@@ -8,12 +8,15 @@ import socket
 app = Flask(__name__)
 random.seed()
 
+TCP_IP = '192.168.0.114'
+TCP_PORT = 3300
+BUFFER_SIZE = 20
+seccion = {'connected' : False,
+			'conn': None}
 
 @app.route('/', methods=['GET'])
 def index():
 	message = random.randint(1,100)
-
-
 	return render_template('index.html', message=message)
 
 @app.route('/findESP32')
@@ -23,17 +26,25 @@ def findESP32():
 	s.listen(1)
 	print("connecting...")
 	conn, addr = s.accept()
+	seccion['conn'] = conn
+	seccion['connected'] = True
 	print("Connected")
 	return ("nothing")
 
 @app.route('/chart-data', methods=['GET'])
 def chart_data():
 	def generate_random_data():
-		while True:
-			json_data = json.dumps(
-				{'time':datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value':random.random()*100 })
-			yield f"data:{json_data}\n\n"
-			time.sleep(0.5)
+		if seccion['connected']:
+			while True:
+				rawData = seccion['conn'].recv(BUFFER_SIZE)
+				print(rawData)
+				if len(rawData) is not 1:
+					continue
+				data = int.from_bytes(rawData, byteorder='big')
+				json_data = json.dumps(
+					{'time':datetime.now().strftime('%H:%M:%S:%f'), 'value':data })
+				yield f"data:{json_data}\n\n"
+				time.sleep(.1)
 
 	return Response(generate_random_data(), mimetype='text/event-stream')	
 
